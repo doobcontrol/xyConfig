@@ -91,7 +91,7 @@ namespace com.xiyuansoft.xyConfig
             XmlDocument doc = getXyConfigDoc();
             if (doc.GetElementsByTagName(nName).Count == 0)
             {
-                creatNewNode(doc.GetElementsByTagName(rootName)[0] as XmlElement, nName);
+                creatNewNode(doc.DocumentElement, nName);
             }
             return doc.GetElementsByTagName(nName)[0] as XmlElement; ;
         }
