@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.xiyuansoft.xyConfig", "com.xiyuansoft.xyConfig\com.xiyuansoft.xyConfig.csproj", "{DDC288B6-7BF6-4ED1-BAE9-33FD0B6208E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.xiyuansoft.xyConfigSample", "com.xiyuansoft.xyConfigSample\com.xiyuansoft.xyConfigSample.csproj", "{09DACADB-FF9B-4FA5-96F9-CACE406AFE64}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DDC288B6-7BF6-4ED1-BAE9-33FD0B6208E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDC288B6-7BF6-4ED1-BAE9-33FD0B6208E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDC288B6-7BF6-4ED1-BAE9-33FD0B6208E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDC288B6-7BF6-4ED1-BAE9-33FD0B6208E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09DACADB-FF9B-4FA5-96F9-CACE406AFE64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09DACADB-FF9B-4FA5-96F9-CACE406AFE64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09DACADB-FF9B-4FA5-96F9-CACE406AFE64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09DACADB-FF9B-4FA5-96F9-CACE406AFE64}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3CD5410D-577D-4A61-841C-C360B11B5AEB}
+	EndGlobalSection
+EndGlobal
