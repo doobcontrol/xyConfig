@@ -31,5 +31,43 @@ namespace com.xiyuansoft.xyConfig
         }
 
 
+        public static Dictionary<string, Dictionary<string, string>> 
+            getTabledPars(string parTableName)
+        {
+            return Persistent.getTabledPars(parTableName);
+        }
+        public static void newTabledParsRow(
+            string parTableName,
+            string parRowName,
+            Dictionary<string, string> parsRow)
+        {
+            Persistent.newTabledParsRow(parTableName, parRowName, parsRow);
+        }
+        public static void editTabledParsRow(
+            string parTableName,
+            string parRowName,
+            Dictionary<string, string> parsRow)
+        {
+            Persistent.editTabledParsRow(parTableName, parRowName, parsRow);
+        }
+        public static void editTabledPar(
+            string parTableName,
+            string parRowName,
+            string parName,
+            string parValue)
+        {
+            Persistent.editTabledPar(
+                parTableName,
+                parRowName,
+                parName,
+                parValue);
+        }
+        public static void delTabledParsRow(
+            string parTableName,
+            string parRowName)
+        {
+            Persistent.delTabledParsRow(parTableName, parRowName);
+        }
+
     }
 }

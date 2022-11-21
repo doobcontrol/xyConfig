@@ -28,5 +28,10 @@ namespace com.xiyuansoft.xyConfigSample
         {
             new FrmOnePar().ShowDialog();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            new FrmTabledPars().ShowDialog();
+        }
     }
 }

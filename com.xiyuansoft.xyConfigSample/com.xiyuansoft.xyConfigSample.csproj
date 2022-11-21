@@ -58,6 +58,12 @@
     <Compile Include="FrmOnePar.Designer.cs">
       <DependentUpon>FrmOnePar.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmTabledPars.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmTabledPars.Designer.cs">
+      <DependentUpon>FrmTabledPars.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FrmMain.resx">
@@ -65,6 +71,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmOnePar.resx">
       <DependentUpon>FrmOnePar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmTabledPars.resx">
+      <DependentUpon>FrmTabledPars.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
