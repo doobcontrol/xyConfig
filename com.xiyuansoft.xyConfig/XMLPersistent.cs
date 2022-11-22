@@ -169,6 +169,29 @@ namespace com.xiyuansoft.xyConfig
             return tableParsDic;
         }
 
+        public Dictionary<string, string> getTabledRowPars(string parTableName, string parRowName)
+        {
+            XmlElement ParTableNode = getParTableNode(parTableName);
+            if (ParTableNode == null)
+            {
+                return null;
+            }
+            Dictionary<string, string> rowParsMap = null;
+            foreach (XmlElement rowNode in ParTableNode.ChildNodes)
+            {
+                if(rowNode.Name== parRowName)
+                {
+                    rowParsMap = new Dictionary<string, string>();
+                    foreach (XmlAttribute xa in rowNode.Attributes)
+                    {
+                        rowParsMap.Add(xa.Name, xa.Value);
+                    }
+                    break;
+                }
+            }
+            return rowParsMap;
+        }
+
         public void newTabledParsRow(
             string parTableName, 
             string parRowName, 

@@ -36,6 +36,13 @@ namespace com.xiyuansoft.xyConfig
         {
             return Persistent.getTabledPars(parTableName);
         }
+        public static Dictionary<string, string>
+            getTabledRowPars(string parTableName, string parRowName)
+        {
+            return Persistent.getTabledRowPars(parTableName, parRowName);
+        }
+
+
         public static void newTabledParsRow(
             string parTableName,
             string parRowName,
