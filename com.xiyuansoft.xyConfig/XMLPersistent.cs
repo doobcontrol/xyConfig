@@ -121,6 +121,10 @@ namespace com.xiyuansoft.xyConfig
         {
             return RowNodeName.Substring(RowNodeNamePrefix.Length);
         }
+        public string addRowNodeNamePrefix(string RowNodeName)
+        {
+            return RowNodeNamePrefix + RowNodeName;
+        }
 
         #region IPersistent
 
@@ -171,6 +175,7 @@ namespace com.xiyuansoft.xyConfig
 
         public Dictionary<string, string> getTabledRowPars(string parTableName, string parRowName)
         {
+            parRowName = addRowNodeNamePrefix(parRowName);
             XmlElement ParTableNode = getParTableNode(parTableName);
             if (ParTableNode == null)
             {
@@ -197,10 +202,11 @@ namespace com.xiyuansoft.xyConfig
             string parRowName, 
             Dictionary<string, string> parsRow)
         {
+            parRowName = addRowNodeNamePrefix(parRowName);
             XmlElement ParTableNode = getParTableNode(parTableName, true);
             XmlElement newTabledRowNode = creatNewNode(
                 ParTableNode, 
-                RowNodeNamePrefix + parRowName);
+                parRowName);
             foreach(string key in parsRow.Keys)
             {
                 newTabledRowNode.SetAttribute(key, parsRow[key]);
@@ -210,9 +216,10 @@ namespace com.xiyuansoft.xyConfig
 
         public void editTabledParsRow(string parTableName, string parRowName, Dictionary<string, string> parsRow)
         {
+            parRowName = addRowNodeNamePrefix(parRowName);
             XmlElement ParTableNode = getParTableRowNode(
                 parTableName, 
-                RowNodeNamePrefix + parRowName);
+                parRowName);
             foreach (string key in parsRow.Keys)
             {
                 ParTableNode.SetAttribute(key, parsRow[key]);
@@ -222,9 +229,10 @@ namespace com.xiyuansoft.xyConfig
 
         public void delTabledParsRow(string parTableName, string parRowName)
         {
+            parRowName = addRowNodeNamePrefix(parRowName);
             XmlElement ParTableNode = getParTableRowNode(
                 parTableName, 
-                RowNodeNamePrefix + parRowName);
+                parRowName);
             ParTableNode.ParentNode.RemoveChild(ParTableNode);
             Save(ParTableNode);
         }
@@ -235,9 +243,10 @@ namespace com.xiyuansoft.xyConfig
             string parName, 
             string parValue)
         {
+            parRowName = addRowNodeNamePrefix(parRowName);
             XmlElement ParTableNode = getParTableRowNode(
                 parTableName, 
-                RowNodeNamePrefix + parRowName);
+                parRowName);
             ParTableNode.SetAttribute(parName, parValue);
             Save(ParTableNode);
         }
