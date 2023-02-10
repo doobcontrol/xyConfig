@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -25,52 +27,76 @@ namespace com.xiyuansoft.xyConfig
                 .LocalPath);
         public string fullConfigFileName;
 
+        bool CheckSave = true;
         public XMLPersistent()
         {
             fullConfigFileName = System.IO.Path.Combine(appDataPath, fullName);
         }
-        public void Save(XmlDocument doc)
+        ~XMLPersistent()
         {
-            doc.Save(fullConfigFileName);
+            if (myDoc != null && docChanged)
+            {
+                myDoc.Save(fullConfigFileName);
+            }
+            CheckSave = false;
+            myDoc = null;
         }
-        public void Save(XmlElement xe)
+        public void clean()
         {
-            Save(xe.OwnerDocument);
+            CheckSave = false;
         }
+
+        bool docChanged = false;
+        public void Save()
+        {
+            docChanged = true;
+        }
+
+        XmlDocument myDoc;
         public XmlDocument getXyConfigDoc()
         {
-            if (!Directory.Exists(appDataPath))
+            if(myDoc == null)
             {
-                Directory.CreateDirectory(appDataPath);
+                if (!Directory.Exists(appDataPath))
+                {
+                    Directory.CreateDirectory(appDataPath);
+                }
+
+                myDoc = new XmlDocument();
+
+                if (File.Exists(fullConfigFileName))
+                {
+                    myDoc.Load(fullConfigFileName);
+                }
+                else
+                {
+                    XmlElement newNode = myDoc.CreateElement(rootName);
+                    myDoc.AppendChild(newNode);
+                }
+
+                //启动定期保存线程
+                Thread cmdThread = new Thread(new ThreadStart(
+                    () => {
+                        while (CheckSave)
+                        {
+                            Thread.Sleep(1000);
+                            if (myDoc != null && docChanged)
+                            {
+                                myDoc.Save(fullConfigFileName);
+                                docChanged = false;
+                            }
+                        }
+                    }
+                    ));
+                cmdThread.Start();
             }
 
-            XmlDocument doc = new XmlDocument();
-
-            if (File.Exists(fullConfigFileName))
-            {
-                doc.Load(fullConfigFileName);
-            }
-            else
-            {
-                creatNewNode(doc, rootName);
-            }
-
-            return doc;
+            return myDoc;
         }       
         public XmlElement creatNewNode(XmlNode pNode, string nodeName)
         {
-            XmlDocument doc = null;
-            if(pNode is XmlDocument)
-            {
-                doc = pNode as XmlDocument;
-            }
-            else
-            {
-                doc = pNode.OwnerDocument;
-            }
-            XmlElement newNode = doc.CreateElement(nodeName);
+            XmlElement newNode = getXyConfigDoc().CreateElement(nodeName);
             pNode.AppendChild(newNode);
-            Save(doc);
             return newNode;
         }
         public XmlElement getOrCreatNewNode(XmlElement pNode, string nodeName, bool createNew = false)
@@ -146,7 +172,7 @@ namespace com.xiyuansoft.xyConfig
         {
             XmlElement xe = getSignleParsNode();
             xe.SetAttribute(parName, parValue);
-            Save(xe);
+            Save();
         }
 
         public Dictionary<string, Dictionary<string, string>> getTabledPars(string parTableName)
@@ -211,20 +237,23 @@ namespace com.xiyuansoft.xyConfig
             {
                 newTabledRowNode.SetAttribute(key, parsRow[key]);
             }
-            Save(ParTableNode);
+            Save();
         }
 
-        public void editTabledParsRow(string parTableName, string parRowName, Dictionary<string, string> parsRow)
+        public void editTabledParsRow(
+            string parTableName, 
+            string parRowName, 
+            Dictionary<string, string> parsRow)
         {
             parRowName = addRowNodeNamePrefix(parRowName);
-            XmlElement ParTableNode = getParTableRowNode(
+            XmlElement editTabledRowNode = getParTableRowNode(
                 parTableName, 
                 parRowName);
             foreach (string key in parsRow.Keys)
             {
-                ParTableNode.SetAttribute(key, parsRow[key]);
+                editTabledRowNode.SetAttribute(key, parsRow[key]);
             }
-            Save(ParTableNode);
+            Save();
         }
 
         public void delTabledParsRow(string parTableName, string parRowName)
@@ -234,7 +263,7 @@ namespace com.xiyuansoft.xyConfig
                 parTableName, 
                 parRowName);
             ParTableNode.ParentNode.RemoveChild(ParTableNode);
-            Save(ParTableNode);
+            Save();
         }
 
         public void editTabledPar(
@@ -248,7 +277,7 @@ namespace com.xiyuansoft.xyConfig
                 parTableName, 
                 parRowName);
             ParTableNode.SetAttribute(parName, parValue);
-            Save(ParTableNode);
+            Save();
         }
 
         #endregion

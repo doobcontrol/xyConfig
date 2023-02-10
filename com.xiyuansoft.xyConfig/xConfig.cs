@@ -76,5 +76,9 @@ namespace com.xiyuansoft.xyConfig
             Persistent.delTabledParsRow(parTableName, parRowName);
         }
 
+        public static void clean()
+        {
+            Persistent.clean();
+        }
     }
 }

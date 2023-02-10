@@ -8,6 +8,7 @@ namespace com.xiyuansoft.xyConfig
 {
     public interface IPersistent
     {
+        void clean();
         string getOnePar(string parName);
         void setOnePar(string parName, string parValue);
 
