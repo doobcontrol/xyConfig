@@ -1,4 +1,5 @@
-﻿using System;
+﻿using com.xiyuansoft.xyConfig;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,9 +15,16 @@ namespace com.xiyuansoft.xyConfigSample
         [STAThread]
         static void Main()
         {
+            Application.ApplicationExit += new EventHandler(Application_Exit);
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FrmMain());
+        }
+
+        static void Application_Exit(object sender, EventArgs e)
+        {
+            xConfig.clean();
         }
     }
 }
