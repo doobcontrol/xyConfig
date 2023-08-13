@@ -30,7 +30,24 @@ namespace com.xiyuansoft.xyConfig
             Persistent.setOnePar(parName, parValue);
         }
 
+        public static Dictionary<string, Dictionary<string, string>> getList(string parListName)
+        {
+            return Persistent.getList(parListName);
+        }
+        public static void editListPar(string parListName, Dictionary<string, string> parsRow)
+        {
+            Persistent.editListPar(parListName, parsRow);
+        }
+        public static void editListPar(string parListName, string parsRowID, string parName, string parValue)
+        {
+            Persistent.editListPar(parListName, parsRowID, parName, parValue);
+        }
+        public static void delListPar(string parListName, string parsRowID)
+        {
+            Persistent.delListPar(parListName, parsRowID);
+        }
 
+        
         public static Dictionary<string, Dictionary<string, string>> 
             getTabledPars(string parTableName)
         {

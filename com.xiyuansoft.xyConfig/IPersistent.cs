@@ -12,6 +12,11 @@ namespace com.xiyuansoft.xyConfig
         string getOnePar(string parName);
         void setOnePar(string parName, string parValue);
 
+        Dictionary<string, Dictionary<string, string>> getList(string parListName);
+        void editListPar(string parListName, Dictionary<string, string> parsRow);
+        void editListPar(string parListName, string parsRowID, string parName, string parValue);
+        void delListPar(string parListName, string parsRowID);
+
         Dictionary<string, Dictionary<string, string>> getTabledPars(string parTableName);
         Dictionary<string, string> getTabledRowPars(string parTableName, string parRowName);
         void newTabledParsRow(

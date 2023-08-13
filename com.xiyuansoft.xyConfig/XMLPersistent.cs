@@ -13,12 +13,17 @@ using System.Xml.Serialization;
 
 namespace com.xiyuansoft.xyConfig
 {
-    public class XMLPersistent : IPersistent
+    public class XMLPersistent : IPersistent,IDisposable
     {
         public static string rootName = "xConfig";
         public static string SignleParsNodeName = "SignlePars";
         public static string TableParsNodeName = "TablePars";
         public static string RowNodeNamePrefix = "r"; //行名称传入时可能为数字或其它非法字符
+
+        public static string ListParsNodeName = "lists";
+        public static string ListItemNodeName = "item";
+        public static string ListItemNodeIDAttr = "id";
+
 
         public string fullName = "xyApp.config";
         public string appDataPath =
@@ -152,6 +157,16 @@ namespace com.xiyuansoft.xyConfig
             return RowNodeNamePrefix + RowNodeName;
         }
 
+        public XmlElement getListsNode()
+        {
+            return get1LevelNode(ListParsNodeName);
+        }
+        public XmlElement getParListNode(string parListName, bool createNew = false)
+        {
+            return getOrCreatNewNode(getListsNode(), parListName, createNew);
+        }
+
+
         #region IPersistent
 
         public string getOnePar(string parName)
@@ -174,6 +189,87 @@ namespace com.xiyuansoft.xyConfig
             xe.SetAttribute(parName, parValue);
             Save();
         }
+
+        public Dictionary<string, Dictionary<string, string>> getList(string parListName)
+        {
+            XmlElement ParListNode = getParListNode(parListName);
+            if (ParListNode == null)
+            {
+                return null;
+            }
+            Dictionary<string, Dictionary<string, string>> ListParsDic
+                = new Dictionary<string, Dictionary<string, string>>();
+            Dictionary<string, string> rowParsMap;
+            foreach (XmlElement rowNode in ParListNode.ChildNodes)
+            {
+                rowParsMap = new Dictionary<string, string>();
+                ListParsDic.Add(
+                    rowNode.GetAttribute(ListItemNodeIDAttr),
+                    rowParsMap);
+                foreach (XmlAttribute xa in rowNode.Attributes)
+                {
+                    rowParsMap.Add(xa.Name, xa.Value);
+                }
+            }
+            return ListParsDic;
+        }
+        public void editListPar(string parListName, Dictionary<string, string> parsRow)
+        {
+            XmlElement ItemNode = getParListItemNode(parListName, parsRow[ListItemNodeIDAttr], true);
+            foreach(string key in parsRow.Keys)
+            {
+                ItemNode.SetAttribute(key, parsRow[key]);
+            }
+            Save();
+        }
+        public void editListPar(string parListName, string parsRowID, string parName, string parValue)
+        {
+            XmlElement ItemNode = getParListItemNode(parListName, parsRowID, true);
+            ItemNode.SetAttribute(parName, parValue);
+            Save();
+        }
+        public void delListPar(string parListName, string parsRowID)
+        {
+            XmlElement ItemNode = getParListItemNode(parListName, parsRowID, false);
+            if(ItemNode != null)
+            {
+                ItemNode.ParentNode.RemoveChild(ItemNode);
+                Save();
+            }
+        }
+        private XmlElement getParListItemNode(string parListName, string parsRowID, bool createNew = false)
+        {
+            return getParListItemNode(getParListNode(parListName, createNew), parsRowID, createNew);
+        }
+        private XmlElement getParListItemNode(XmlElement ParListNode, string parsRowID, bool createNew = false)
+        {
+            XmlElement ParListItemNode = null;
+
+            foreach(XmlNode Node in ParListNode.ChildNodes)
+            {
+                XmlElement tempE = Node as XmlElement; ;
+                if (tempE.GetAttribute(ListItemNodeIDAttr) == parsRowID)
+                {
+                    ParListItemNode = tempE;
+                    break;
+                }
+            }
+
+            if (ParListItemNode == null && createNew)
+            {
+                ParListItemNode = addParListItemNode(ParListNode, parsRowID);
+            }
+
+            return ParListItemNode;
+        }
+        private XmlElement addParListItemNode(XmlElement ParListNode, string parsRowID)
+        {
+            XmlElement ParListItemNode = myDoc.CreateElement(ListItemNodeName);
+            ParListItemNode.SetAttribute(ListItemNodeIDAttr, parsRowID);
+            ParListNode.AppendChild(ParListItemNode);
+            return ParListItemNode;
+        }
+
 
         public Dictionary<string, Dictionary<string, string>> getTabledPars(string parTableName)
         {
@@ -281,5 +377,10 @@ namespace com.xiyuansoft.xyConfig
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            clean();
+        }
     }
 }
