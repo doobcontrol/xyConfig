@@ -87,7 +87,18 @@ namespace com.xiyuansoft.xyConfig
                             Thread.Sleep(1000);
                             if (myDoc != null && docChanged)
                             {
-                                myDoc.Save(fullConfigFileName);
+                                while (true)
+                                {
+                                    try
+                                    {
+                                        myDoc.Save(fullConfigFileName);
+                                        break;
+                                    }
+                                    catch
+                                    {
+                                        Thread.Sleep(1000);
+                                    }
+                                }
                                 docChanged = false;
                             }
                         }
